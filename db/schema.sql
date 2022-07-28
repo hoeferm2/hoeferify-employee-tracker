@@ -8,22 +8,23 @@ CREATE TABLE departments (
     department_name VARCHAR(30)
 );
 
--- CREATE TABLE roles (
---     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
---     department_id INT NOT NULL,
---     title VARCHAR(30),
---     salary DECIMAL,
---     FOREIGN KEY(department_id)
---     REFERENCES department(id)
---     ON DELETE CASCADE
--- );
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    role_id INT NOT NULL,
+    title VARCHAR(30),
+    salary DECIMAL
+    FOREIGN KEY(role_id)
+    REFERENCES departments(id)
+);
 
 -- CREATE TABLE employees (
 --     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 --     first_name VARCHAR(30),
 --     last_name VARCHAR(30),
---     role_id INT NOT NULL
---     manager_id INT NOT NULL
+--     employee_id INT NOT NULL
+--     -- FOREIGN KEY(employee_id)
+--     -- REFERENCES roles(id)
+--     -- ON DELETE CASCADE
 
 -- )
 

@@ -3,6 +3,7 @@ const inquirer = require('inquirer')
 const mysql = require('mysql2');
 const PORT = process.env.PORT || 3001;
 const app = express();
+const table = require('console.table')
 
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
@@ -22,11 +23,9 @@ const db = mysql.createConnection(
     console.log(`.`)
 );
 
-// Query database
-// db.query('SELECT * FROM departments', function (err, results) {
-//     console.log(results);
-// });
-
+db.query('SELECT * FROM departments', function (err, results) {
+    console.log(results);
+});
 
 const start = () => {
     inquirer.prompt([
@@ -44,21 +43,21 @@ const start = () => {
                 case "Delete Department":
                     deleteDepartment()
                     break;
-                // case "Add Role":
-                //     addIntern()
-                //     break;
-                // case "Delete Role":
-                //     addEngineer()
-                //     break;
-                // case "Add Employee":
-                //     addEngineer()
-                //     break;
-                // case "Delete Employee":
-                //     addEngineer()
-                //     break;
-                // case "Close Application":
-                //     finish()
-                //     break;
+                case "Add Role":
+                    addRole()
+                    break;
+                case "Delete Role":
+                    deleteRole()
+                    break;
+                case "Add Employee":
+                    addEmployee()
+                    break;
+                case "Delete Employee":
+                    deleteEmployee()
+                    break;
+                case "Close Application":
+                    finish()
+                    break;
                 default:
                     console.log("thanks for using our software!")
                     break;
@@ -67,7 +66,7 @@ const start = () => {
         })
 }
 
-
+//THIS WORKS FOR INSERT
 const addDepartment = () => {
 
     inquirer.prompt([
@@ -79,7 +78,8 @@ const addDepartment = () => {
 
 
     ]).then(ans => {
-        db.query("INSERT INTO departments WHERE department_name VALUE?", ans.departmentName, (err, result) => {
+
+        db.query("INSERT INTO departments(department_name) VALUES(?)", ans.departmentName, (err, result) => {
             if (err) {
                 console.log(err);
             }
@@ -89,6 +89,7 @@ const addDepartment = () => {
     })
 }
 const deleteDepartment = () => {
+
 
     inquirer.prompt([
         {
@@ -100,6 +101,91 @@ const deleteDepartment = () => {
 
     ]).then(ans => {
         db.query(`DELETE FROM departments WHERE department_name = ?`, ans.departmentDeleteName, (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(result);
+        });
+        start()
+    })
+}
+const addRole = () => {
+
+    inquirer.prompt([
+        {
+            type: 'Input',
+            message: "What role would you like to add?",
+            name: 'roleTitle',
+        },
+
+
+    ]).then(ans => {
+
+        db.query("INSERT INTO roles(title) VALUES(?)", ans.roleTitle, (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(result);
+        });
+        start()
+    })
+}
+const deleteRole = () => {
+
+
+    inquirer.prompt([
+        {
+            type: 'Input',
+            message: "Which role is getting axed?",
+            name: 'roleDeleteTitle',
+        },
+
+
+    ]).then(ans => {
+        db.query(`DELETE FROM roles WHERE title = ?`, ans.roleDeleteTitle, (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(result);
+        });
+        start()
+    })
+}
+const addEmployee = () => {
+
+    inquirer.prompt([
+        {
+            type: 'Input',
+            message: "What employee would you like to add?",
+            name: 'employeeLastName',
+        },
+
+
+    ]).then(ans => {
+
+        db.query("INSERT INTO employees(title) VALUES(?)", ans.employeeLastName, (err, result) => {
+            if (err) {
+                console.log(err);
+            }
+            console.log(result);
+        });
+        start()
+    })
+}
+const deleteEmployee = () => {
+
+
+    inquirer.prompt([
+        {
+            type: 'List',
+            message: "Which employee is getting axed?",
+            choices: (asdf),
+            name: 'employeeDelete',
+        },
+
+
+    ]).then(ans => {
+        db.query(`DELETE FROM employees WHERE last_name = ?`, ans.employeeDelete, (err, result) => {
             if (err) {
                 console.log(err);
             }
