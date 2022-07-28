@@ -1,7 +1,5 @@
 const express = require('express');
-const inquirer = require('inquirer')
 const mysql = require('mysql2');
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -21,10 +19,10 @@ const db = mysql.createConnection(
     console.log(`.`)
 );
 
-
-
-
-
+// Query database
+db.query('SELECT * FROM departments', function (err, results) {
+    console.log(results);
+});
 
 app.use((req, res) => {
     res.status(404).end();
@@ -33,3 +31,9 @@ app.use((req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
+//EXPORTED VARIABLES
+module.exports = { mysql };
+module.exports = { db }
+
