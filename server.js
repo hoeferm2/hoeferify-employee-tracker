@@ -19,7 +19,11 @@ const db = mysql.createConnection(
     },
     console.log(`.`)
 );
+const finish = () => {
 
+    console.log("Thanks for using the applicaiton")
+
+}
 
 const start = () => {
     inquirer.prompt([
@@ -106,11 +110,6 @@ const addDepartment = () => {
                 console.log(err);
             }
         });
-        db.query('SELECT * FROM departments', function (err, results) {
-            if (err) {
-                console.log(err);
-            } console.log(result)
-        });
         start()
     })
 }
@@ -137,10 +136,6 @@ const addRole = () => {
             }
         });
 
-
-        db.query('SELECT * FROM roles', function (err, results) {
-            console.log(results);
-        });
         start()
     })
 }
@@ -157,23 +152,13 @@ const addEmployee = () => {
             message: "What is the employees last name??",
             name: 'employeeLastName',
         },
-        {
-            type: 'List',
-            choices: (rolePool),
-            message: "What is their role?",
-            name: 'employeeTitle',
-        },
-
 
     ]).then(ans => {
 
-        db.query(`INSERT INTO employees(first_name,last_name) VALUES("${ans.employeeFirstName}",${ans.employeeLastName})`, (err, result) => {
+        db.query(`INSERT INTO employees(first_name,last_name) VALUES("${ans.employeeFirstName}","${ans.employeeLastName}")`, (err, result) => {
             if (err) {
                 console.log(err);
             };
-        });
-        db.query('SELECT * FROM roles', function (err, results) {
-            console.log(results);
         });
         start()
     })
