@@ -3,7 +3,6 @@ const inquirer = require('inquirer')
 const mysql = require('mysql2');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const table = require('console.table')
 
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
@@ -23,9 +22,6 @@ const db = mysql.createConnection(
     console.log(`.`)
 );
 
-db.query('SELECT * FROM departments', function (err, results) {
-    console.log(results);
-});
 
 const start = () => {
     inquirer.prompt([
@@ -83,11 +79,14 @@ const addDepartment = () => {
             if (err) {
                 console.log(err);
             }
-            console.log(result);
+        });
+        db.query('SELECT * FROM departments', function (err, results) {
+            console.log(results);
         });
         start()
     })
 }
+//TODO:
 const deleteDepartment = () => {
 
 
@@ -127,6 +126,9 @@ const addRole = () => {
             }
             console.log(result);
         });
+        db.query('SELECT * FROM roles', function (err, results) {
+            console.log(results);
+        });
         start()
     })
 }
@@ -148,12 +150,30 @@ const deleteRole = () => {
             }
             console.log(result);
         });
+        db.query('SELECT * FROM roles', function (err, results) {
+            console.log(results);
+        });
         start()
     })
 }
 const addEmployee = () => {
 
     inquirer.prompt([
+        {
+            type: 'Input',
+            message: "What is the employees first name?",
+            name: 'employeeFirstName',
+        },
+        {
+            type: 'Input',
+            message: "What is the employees last name??",
+            name: 'employeeLastName',
+        },
+        {
+            type: 'Input',
+            message: "What employee would you like to add?",
+            name: 'employeeTitle',
+        },
         {
             type: 'Input',
             message: "What employee would you like to add?",
@@ -166,12 +186,15 @@ const addEmployee = () => {
         db.query("INSERT INTO employees(title) VALUES(?)", ans.employeeLastName, (err, result) => {
             if (err) {
                 console.log(err);
-            }
-            console.log(result);
+            };
+        });
+        db.query('SELECT * FROM roles', function (err, results) {
+            console.log(results);
         });
         start()
     })
 }
+//TODO:
 const deleteEmployee = () => {
 
 
@@ -190,6 +213,9 @@ const deleteEmployee = () => {
                 console.log(err);
             }
             console.log(result);
+        });
+        db.query('SELECT * FROM roles', function (err, results) {
+            console.log(results);
         });
         start()
     })
