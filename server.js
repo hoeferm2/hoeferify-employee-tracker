@@ -25,7 +25,7 @@ const start = () => {
     inquirer.prompt([
         {
             type: 'list',
-            choices: ["Add Department", "Add Role", "Add Employee", "View Departments", "View Roles", "View Employees", "Close Application"],
+            choices: ["Add Department", "Add Role", "Add Employee", "View Departments", "View Roles", "View Employees", "Update Employee", "Close Application"],
             message: 'Hello what would you like to do?',
             name: 'selection'
         }]).then(ans => {
@@ -49,6 +49,9 @@ const start = () => {
                 case "View Employees":
                     viewEmployees()
                     break;
+                case "Update Employee":
+                    updateEmployee()
+                    break;
                 case "Close Application":
                     finish()
                     break;
@@ -64,7 +67,7 @@ const viewDepartments = () => {
     db.query('SELECT * FROM departments', function (err, results) {
         if (err) {
             console.log(err);
-        } console.log(result)
+        } console.log(results)
     });
     start()
 }
@@ -72,7 +75,7 @@ const viewRoles = () => {
     db.query('SELECT * FROM roles', function (err, results) {
         if (err) {
             console.log(err);
-        } console.log(result)
+        } console.log(results)
     });
     start()
 }
@@ -80,7 +83,7 @@ const viewEmployees = () => {
     db.query('SELECT * FROM employees', function (err, results) {
         if (err) {
             console.log(err);
-        } console.log(result)
+        } console.log(results)
     });
     start()
 }
@@ -134,13 +137,13 @@ const addRole = () => {
             }
         });
 
+
         db.query('SELECT * FROM roles', function (err, results) {
             console.log(results);
         });
         start()
     })
 }
-//TODO:
 const addEmployee = () => {
 
     inquirer.prompt([
@@ -155,7 +158,8 @@ const addEmployee = () => {
             name: 'employeeLastName',
         },
         {
-            type: 'Input',
+            type: 'List',
+            choices: (rolePool),
             message: "What is their role?",
             name: 'employeeTitle',
         },
