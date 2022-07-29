@@ -25,7 +25,7 @@ const start = () => {
     inquirer.prompt([
         {
             type: 'list',
-            choices: ["Add Department", "Delete Department", "Add Role", "Delete Role", "Add Employee", "Delete Employee", "Close Application"],
+            choices: ["Add Department", "Add Role", "Add Employee", "View Departments", "View Roles", "View Employees", "Close Application"],
             message: 'Hello what would you like to do?',
             name: 'selection'
         }]).then(ans => {
@@ -34,20 +34,20 @@ const start = () => {
                 case "Add Department":
                     addDepartment()
                     break;
-                case "Delete Department":
-                    deleteDepartment()
-                    break;
                 case "Add Role":
                     addRole()
-                    break;
-                case "Delete Role":
-                    deleteRole()
                     break;
                 case "Add Employee":
                     addEmployee()
                     break;
-                case "Delete Employee":
-                    deleteEmployee()
+                case "View Departments":
+                    viewDepartments()
+                    break;
+                case "View Roles":
+                    viewRoles()
+                    break;
+                case "View Employees":
+                    viewEmployees()
                     break;
                 case "Close Application":
                     finish()
@@ -60,7 +60,32 @@ const start = () => {
         })
 }
 
-//THIS WORKS FOR INSERT
+const viewDepartments = () => {
+    db.query('SELECT * FROM departments', function (err, results) {
+        if (err) {
+            console.log(err);
+        } console.log(result)
+    });
+    start()
+}
+const viewRoles = () => {
+    db.query('SELECT * FROM roles', function (err, results) {
+        if (err) {
+            console.log(err);
+        } console.log(result)
+    });
+    start()
+}
+const viewEmployees = () => {
+    db.query('SELECT * FROM employees', function (err, results) {
+        if (err) {
+            console.log(err);
+        } console.log(result)
+    });
+    start()
+}
+
+
 const addDepartment = () => {
 
     inquirer.prompt([
@@ -79,6 +104,9 @@ const addDepartment = () => {
             }
         });
         db.query('SELECT * FROM departments', function (err, results) {
+            if (err) {
+                console.log(err);
+            } console.log(result)
         });
         start()
     })
@@ -100,13 +128,11 @@ const addRole = () => {
 
 
     ]).then(ans => {
-
-        db.query("INSERT INTO roles(title,salary) VALUES(?)", [ans.roleTitle, ans.roleSalary], (err, result) => {
+        db.query(`INSERT INTO roles(title,salary) VALUES("${ans.roleTitle}",${ans.roleSalary})`, (err, result) => {
             if (err) {
                 console.log(err);
             }
         });
-
 
         db.query('SELECT * FROM roles', function (err, results) {
             console.log(results);
@@ -114,7 +140,7 @@ const addRole = () => {
         start()
     })
 }
-
+//TODO:
 const addEmployee = () => {
 
     inquirer.prompt([
@@ -130,19 +156,14 @@ const addEmployee = () => {
         },
         {
             type: 'Input',
-            message: "What employee would you like to add?",
+            message: "What is their role?",
             name: 'employeeTitle',
-        },
-        {
-            type: 'Input',
-            message: "What employee would you like to add?",
-            name: 'employeeLastName',
         },
 
 
     ]).then(ans => {
 
-        db.query("INSERT INTO employees(title) VALUES(?)", ans.employeeLastName, (err, result) => {
+        db.query(`INSERT INTO employees(first_name,last_name) VALUES("${ans.employeeFirstName}",${ans.employeeLastName})`, (err, result) => {
             if (err) {
                 console.log(err);
             };
@@ -157,10 +178,9 @@ const addEmployee = () => {
 start()
 
 app.use((req, res) => {
-    res.status(404).end();
+    res.status(404).end(); s
 });
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-
